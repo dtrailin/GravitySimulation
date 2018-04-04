@@ -12,7 +12,6 @@
 namespace thinks {
 namespace ppm {
 
-namespace detail {
 
 inline
 void writeRgbImage(
