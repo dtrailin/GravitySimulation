@@ -26,7 +26,6 @@ class Simulation {
   std::vector<Particle> last_state_;
   static const int kGravitationalConstant = 5000;
 
-
 };
 
 #endif //PROJECT2_SIMULATION_H

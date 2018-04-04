@@ -39,7 +39,7 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input,
                                                                             x_i,
                                                                             y_i,
                                                                             red)];
-          if(current_red_value < 255){
+          if (current_red_value < 255) {
             uint8_t new_value = current_red_value + static_cast<uint8_t>(1);
             pixel_data[gridCoordinateToImageIndex(configuration.gridsize(),
                                                   x_i,
@@ -54,5 +54,5 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input,
   thinks::ppm::writeRgbImage(filename, configuration.gridsize(), configuration.gridsize(), pixel_data);
 }
 int ImageWriter::gridCoordinateToImageIndex(int gridsize, int x, int y, ImageWriter::color color) {
-  return ( y  * gridsize + x) * 3 + color;
+  return (y * gridsize + x) * 3 + color;
 }

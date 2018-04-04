@@ -12,12 +12,11 @@ class ImageWriter {
 
  public:
   static void writeToImage(const std::vector<Particle> &input,
-                            const std::string &filename,
-                            const Configuration &configuration);
+                           const std::string &filename,
+                           const Configuration &configuration);
  private:
-  enum color { red =0, green=1, blue= 2};
+  enum color { red = 0, green = 1, blue = 2 };
   static int gridCoordinateToImageIndex(int gridsize, int x, int y, ImageWriter::color color);
-
 
 };
 

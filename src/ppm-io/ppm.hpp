@@ -14,11 +14,11 @@ namespace ppm {
 
 namespace detail {
 
-template<typename F> inline
+template<typename F>
+inline
 F openFileStream(
-  std::string const& filename,
-  std::ios_base::openmode const mode = std::ios::binary)
-{
+    std::string const &filename,
+    std::ios_base::openmode const mode = std::ios::binary) {
   using namespace std;
 
   auto ofs = F(filename, mode);
@@ -56,11 +56,10 @@ F openFileStream(
 //! - the pixel data cannot be read.
 inline
 void readRgbImage(
-  std::istream& is,
-  std::size_t* width,
-  std::size_t* height,
-  std::vector<std::uint8_t>* pixel_data)
-{
+    std::istream &is,
+    std::size_t *width,
+    std::size_t *height,
+    std::vector<std::uint8_t> *pixel_data) {
   using namespace std;
 
   assert(width != nullptr);
@@ -94,7 +93,7 @@ void readRgbImage(
 
   // Read pixel data.
   pixel_data->resize((*width) * (*height) * 3);
-  is.read(reinterpret_cast<char*>(pixel_data->data()), pixel_data->size());
+  is.read(reinterpret_cast<char *>(pixel_data->data()), pixel_data->size());
 
   if (!is) {
     stringstream ss;
@@ -103,22 +102,19 @@ void readRgbImage(
   }
 }
 
-
 //! See std::istream overload version above.
 //!
 //! Throws an std::runtime_error if file cannot be opened.
 inline
 void readRgbImage(
-  std::string const& filename,
-  std::size_t* width,
-  std::size_t* height,
-  std::vector<std::uint8_t>* pixel_data)
-{
+    std::string const &filename,
+    std::size_t *width,
+    std::size_t *height,
+    std::vector<std::uint8_t> *pixel_data) {
   auto ifs = detail::openFileStream<std::ifstream>(filename);
   readRgbImage(ifs, width, height, pixel_data);
   ifs.close();
 }
-
 
 //! Write a PPM image to an output stream.
 //!
@@ -137,11 +133,10 @@ void readRgbImage(
 //! - the size of the pixel data does not match the width and height.
 inline
 void writeRgbImage(
-  std::ostream& os,
-  std::size_t const width,
-  std::size_t const height,
-  std::vector<std::uint8_t> const& pixel_data)
-{
+    std::ostream &os,
+    std::size_t const width,
+    std::size_t const height,
+    std::vector<std::uint8_t> const &pixel_data) {
   using namespace std;
 
   if (width == 0) {
@@ -165,20 +160,18 @@ void writeRgbImage(
      << "\n"; // Marks beginning of pixel data.
 
   // Write pixel data.
-  os.write(reinterpret_cast<char const*>(pixel_data.data()), pixel_data.size());
+  os.write(reinterpret_cast<char const *>(pixel_data.data()), pixel_data.size());
 }
-
 
 //! See std::ostream overload version above.
 //!
 //! Throws an std::runtime_error if file cannot be opened.
 inline
 void writeRgbImage(
-  std::string const& filename,
-  std::size_t const width,
-  std::size_t const height,
-  std::vector<std::uint8_t> const& pixel_data)
-{
+    std::string const &filename,
+    std::size_t const width,
+    std::size_t const height,
+    std::vector<std::uint8_t> const &pixel_data) {
   auto ofs = detail::openFileStream<std::ofstream>(filename);
   writeRgbImage(ofs, width, height, pixel_data);
   ofs.close();

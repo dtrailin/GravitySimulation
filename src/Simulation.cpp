@@ -11,7 +11,7 @@ Simulation::Simulation(const Configuration &configuration)
     : configuration_(configuration), last_state_(configuration_.large_particles()) {
   std::random_device rd;
   std::default_random_engine generator(rd()); // rd() provides a random seed
-  std::uniform_real_distribution<double> distribution(0, configuration.gridsize()-1);
+  std::uniform_real_distribution<double> distribution(0, configuration.gridsize() - 1);
   last_state_.reserve(static_cast<unsigned long>(configuration.number_small_particles()));
 
   for (int i = 0; i < configuration.number_small_particles(); ++i) {
@@ -20,7 +20,6 @@ Simulation::Simulation(const Configuration &configuration)
                                    distribution(generator),
                                    distribution(generator),
                                    last_state_.size()));
-
 
   }
 
