@@ -23,7 +23,7 @@ F openFileStream(
 
   auto ofs = F(filename, mode);
   if (ofs.fail()) {
-    auto ss = stringstream();
+    stringstream ss;
     ss << "cannot open file '" << filename << "'";
     throw runtime_error(ss.str());
   }
@@ -78,13 +78,13 @@ void readRgbImage(
   assert(*height != 0);
 
   if (magic_number != expected_magic_number) {
-    auto ss = stringstream();
+    stringstream ss;
     ss << "magic number must be '" << expected_magic_number << "'";
     throw runtime_error(ss.str());
   }
 
   if (max_value != expected_max_value) {
-    auto ss = stringstream();
+    stringstream ss;
     ss << "max value must be " << expected_max_value;
     throw runtime_error(ss.str());
   }
@@ -97,7 +97,7 @@ void readRgbImage(
   is.read(reinterpret_cast<char*>(pixel_data->data()), pixel_data->size());
 
   if (!is) {
-    auto ss = stringstream();
+    stringstream ss;
     ss << "failed reading " << pixel_data->size() << " bytes";
     throw runtime_error(ss.str());
   }
