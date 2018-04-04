@@ -14,23 +14,6 @@ namespace ppm {
 
 namespace detail {
 
-template<typename F>
-inline
-F openFileStream(
-    std::string const &filename,
-    std::ios_base::openmode const mode = std::ios::binary) {
-  using namespace std;
-
-  F ofs (filename, mode);
-  if (ofs.fail()) {
-    stringstream ss;
-    ss << "cannot open file '" << filename << "'";
-    throw runtime_error(ss.str());
-  }
-  return ofs;
-}
-}
-
 inline
 void writeRgbImage(
     std::ostream &os,
@@ -73,7 +56,13 @@ void writeRgbImage(
     std::size_t const height,
     std::vector<std::uint8_t> const &pixel_data) {
 
-  std::ofstream ofs(std::move(detail::openFileStream<std::ofstream>(filename)));
+  std::ofstream ofs (filename,  std::ios::binary);
+  if (ofs.fail()) {
+    std::stringstream ss;
+    ss << "cannot open file '" << filename << "'";
+    throw std::runtime_error(ss.str());
+  }
+
 
   writeRgbImage(ofs, width, height, pixel_data);
   ofs.close();
