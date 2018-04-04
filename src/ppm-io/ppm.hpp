@@ -72,7 +72,7 @@ void writeRgbImage(
     std::size_t const width,
     std::size_t const height,
     std::vector<std::uint8_t> const &pixel_data) {
-  auto ofs = detail::openFileStream<std::ofstream>(filename);
+  std::ofstream ofs(detail::openFileStream<std::ofstream>(filename));
   writeRgbImage(ofs, width, height, pixel_data);
   ofs.close();
 }
