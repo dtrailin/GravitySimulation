@@ -1,4 +1,4 @@
-TimeSlots: 100 # Number of iterations to compute
+TimeSlots: 1 # Number of iterations to compute
 TimeStep: 0.005  # Unit time step for each iteration
 Horizon: 1 # 0 => no process communication, # 1 => adjacent process communication (and so on)
 GridSize: 100 # for a 100x100 cell grid
