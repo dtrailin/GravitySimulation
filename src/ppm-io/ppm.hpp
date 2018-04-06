@@ -13,7 +13,7 @@ namespace thinks {
 namespace ppm {
 
 
-inline
+
 void writeRgbImage(
     std::ostream &os,
     std::size_t const width,
@@ -48,7 +48,6 @@ void writeRgbImage(
 //! See std::ostream overload version above.
 //!
 //! Throws an std::runtime_error if file cannot be opened.
-inline
 void writeRgbImage(
     std::string const &filename,
     std::size_t const width,

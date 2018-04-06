@@ -19,7 +19,8 @@ Simulation::Simulation(const Configuration &configuration)
                                    configuration_.small_particle_mass(),
                                    distribution(generator),
                                    distribution(generator),
-                                   last_state_.size()));
+                                   last_state_.size(),
+                                   true));
 
   }
 

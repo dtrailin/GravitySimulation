@@ -40,7 +40,7 @@ bool Configuration::addLargeParticle(const std::string &radius, const std::strin
     return false;
   }
 
-  large_particles_.push_back(Particle(radius_f, mass_f, x_pos_f, y_pos_f, large_particles_.size()));
+  large_particles_.push_back(Particle(radius_f, mass_f, x_pos_f, y_pos_f, large_particles_.size(), false));
 
   return true;
 }

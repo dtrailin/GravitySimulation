@@ -9,7 +9,12 @@
 
 class Particle {
  public:
-  Particle(double radius, double mass, double x_pos, double y_pos, unsigned long id);
+  Particle(double radius,
+             double mass,
+             double x_pos,
+             double y_pos,
+             unsigned long id,
+             bool is_small);
 
   double radius() const {
     return radius_;
@@ -43,6 +48,9 @@ class Particle {
  private:
   double radius_, mass_, x_, y_;
   unsigned long id_;
+  bool is_small_;
+ public:
+  bool is_small() const;
 };
 
 #endif //PROJECT2_PARTICLE_H
