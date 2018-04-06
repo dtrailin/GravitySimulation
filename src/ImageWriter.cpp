@@ -12,7 +12,7 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input,
                                const Configuration &configuration) {
 
   int gridsize = configuration.gridsize();
-  auto pixel_data = std::vector<uint8_t>(static_cast<size_t >(pow(gridsize, 2) * 3), 0);
+  auto pixel_data = std::vector<uint8_t>(static_cast<size_t >(gridsize * gridsize * 3), 0);
   for (const auto &particle : input) {
     if (particle.x_pos() >= 0 && particle.x_pos() <= gridsize - 1 && particle.x_pos() >= 0
         && particle.y_pos() <= gridsize - 1) {
@@ -31,7 +31,12 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input,
       } else {
         int x_i = static_cast<int>(round(particle.x_pos()));
         int y_i = static_cast<int>(round(particle.y_pos()));
-        if (pixel_data[gridCoordinateToImageIndex(gridsize, x_i, y_i, blue)] == 0) {
+        std::cout << "Checking pixel x:" <<  x_i << " y: " << y_i << std::endl;
+
+        unsigned char &index = pixel_data[gridCoordinateToImageIndex(gridsize, x_i, y_i, blue)];
+        std::cout << "at index: " << index << std::endl;
+
+        if (index == 0) {
           uint8_t current_red_value = pixel_data[gridCoordinateToImageIndex(gridsize,
                                                                             x_i,
                                                                             y_i,
