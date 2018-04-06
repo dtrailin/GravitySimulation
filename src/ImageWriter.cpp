@@ -29,8 +29,6 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input,
           }
         }
       } else {
-        std::cout << "Checking pixel x:" << x_i << " y: " << y_i << std::endl;
-
         if (pixel_data[gridCoordinateToImageIndex(gridsize, x_i, y_i, blue)] == 0) {
           uint8_t current_red_value = pixel_data[gridCoordinateToImageIndex(gridsize,
                                                                             x_i,
