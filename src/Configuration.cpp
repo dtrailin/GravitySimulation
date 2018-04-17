@@ -83,16 +83,16 @@ double Configuration::small_particle_radius() const {
 }
 void Configuration::parseConfig(std::ifstream &config, Configuration *configuration) {
   std::regex options("([^\\s]+): ([^\\s]+).*");
-  std::__cxx11::regex planets("([0-9,.]+) ([0-9,.]+) ([0-9,.]+) ([0-9,.]+)");
+  std::regex large_particle("([0-9,.]+) ([0-9,.]+) ([0-9,.]+) ([0-9,.]+)");
 
   std::string line;
   while (std::getline(config, line)) {
     std::istringstream is_line(line);
-    std::__cxx11::smatch matches;
+    std::smatch matches;
 
-    if (regex_search(line, matches, options)) {
+    if (std::regex_search(line, matches, options)) {
       configuration->addValue(matches[1], matches[2]);
-    } else if (regex_search(line, matches, planets)) {
+    } else if (std::regex_search(line, matches, large_particle)) {
       configuration->addLargeParticle(matches[1], matches[2], matches[3], matches[4]);
     }
   }
