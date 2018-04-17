@@ -8,9 +8,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O3")
 
-find_package( MPI REQUIRED )
-SET(CMAKE_CXX_COMPILER mpicxx )
-SET(CMAKE_C_COMPILER mpicc )
 SET(SRCS
         src/Particle.cpp
         src/Particle.h
@@ -19,7 +16,12 @@ SET(SRCS
         src/ForceVector.h
         src/Configuration.cpp
         src/Configuration.h
-        src/ppm-io/ppm.hpp src/ImageWriter.cpp src/ImageWriter.h)
+        src/ppm-io/ppm.hpp src/ImageWriter.cpp src/ImageWriter.h src/Communication.cpp src/Communication.h)
+
+add_subdirectory(lib/mxx)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Output directory for applications" )
 
 add_executable(project2 main.cpp ${SRCS})
+target_link_libraries(project2 mxx)
+
 

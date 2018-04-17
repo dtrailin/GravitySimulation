@@ -1,18 +1,25 @@
 #include <iostream>
 #include <vector>
 
-#include <mpi.h>
 #include <regex>
 
 #include <fstream>
+#include <mxx/utils.hpp>
+#include <mxx/env.hpp>
 
 #include "src/Particle.h"
 #include "src/Simulation.h"
 #include "src/ImageWriter.h"
+#include "src/Communication.h"
 
 std::vector<Particle> particles;
 
 int main(int argc, char **argv) {
+  mxx::env e(argc,argv);
+
+  Communication comm;
+
+  comm.send_to_neighbors();
 
   if (argc != 3) {
     std::cerr << "Spec file and output required" << std::endl;
