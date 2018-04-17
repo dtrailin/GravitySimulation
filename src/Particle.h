@@ -8,7 +8,7 @@
 #include <ostream>
 #include <tuple>
 
-class Particle {
+struct Particle {
  public:
   typedef std::tuple<double, double, double, double, unsigned long, int> particle_t;
 
@@ -34,6 +34,7 @@ class Particle {
   double y_pos() const {
     return y_;
   }
+
   double x_pos() const {
     return x_;
   }
@@ -55,11 +56,17 @@ class Particle {
   }
   friend std::ostream &operator<<(std::ostream &os, const Particle &particle);
 
- private:
+ public:
   double radius_, mass_, x_, y_;
   unsigned long id_;
   bool is_small_;
 
 };
 
+static Particle create_particle(double radius_,
+                                double mass_,
+                                double x_pos,
+                                double y_pos,
+                                unsigned long id,
+                                bool is_small);
 #endif //PROJECT2_PARTICLE_H

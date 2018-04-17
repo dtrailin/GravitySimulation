@@ -48,7 +48,6 @@ install(TARGETS mxx
         EXPORT mxxTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
         INCLUDES DESTINATION include
         )
 
@@ -123,7 +122,6 @@ endif(FAKE_BIG_MPI)
 
 ###### Executable and Libraries
 # Save libs and executables in the same place
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Output directory for applications" )
 
 # build tests
 add_subdirectory(gtest)

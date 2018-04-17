@@ -1,15 +1,12 @@
 #include <iostream>
 #include <vector>
-
 #include <regex>
-
 #include <fstream>
 
 #include "src/Particle.h"
 #include "src/Simulation.h"
 #include "src/ImageWriter.h"
 
-std::vector<Particle> particles;
 
 int main(int argc, char **argv) {
 
@@ -28,13 +25,12 @@ int main(int argc, char **argv) {
   try {
     Configuration::parseConfig(config, &configuration);
 
-  }catch (std::exception e){
+  }catch (std::exception &e){
     std::cerr << e.what() << std::endl;
     config.close();
     return 0;
   }
   config.close();
-
 
   Simulation sim(configuration);
   ImageWriter::writeToImage(sim.run(),

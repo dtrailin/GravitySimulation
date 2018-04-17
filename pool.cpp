@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-
 #include <regex>
+#include <fstream>
 
 #include <mxx/env.hpp>
 
@@ -25,26 +25,15 @@ int main(int argc, char **argv) {
     std::cerr << "File not found" << std::endl;
     return 1;
   }
-  std::regex options("([^\\s]+): ([^\\s]+).*");
-  std::regex planets("([0-9,.]+) ([0-9,.]+) ([0-9,.]+) ([0-9,.]+)");
-
   Configuration configuration;
 
-  std::string line;
-  while (std::getline(config, line)) {
-    std::istringstream is_line(line);
-    std::smatch matches;
+  try {
+    Configuration::parseConfig(config, &configuration);
 
-    if (std::regex_search(line, matches, options)) {
-      if (!configuration.addValue(matches[1], matches[2])) {
-        return 0;
-      }
-    } else if (std::regex_search(line, matches, planets)) {
-      if (!configuration.addLargeParticle(matches[1], matches[2], matches[3], matches[4])) {
-        return 0;
-      }
-
-    }
+  }catch (std::exception &e){
+    std::cerr << e.what() << std::endl;
+    config.close();
+    return 0;
   }
   config.close();
 
@@ -56,5 +45,8 @@ int main(int argc, char **argv) {
   ImageWriter::writeToImage(sim.run(),
                             argv[2],
                             configuration);
+
+
+
   return 0;
 }
