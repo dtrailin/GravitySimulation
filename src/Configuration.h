@@ -23,12 +23,15 @@ class Configuration {
   double timestep() const;
   double small_particle_radius() const;
   const std::vector<Particle> &large_particles() const;
-  bool addValue(const std::string &key, const std::string &value);
+  void addValue(const std::string &key, const std::string &value);
 
-  bool addLargeParticle(const std::string &radius, const std::string &mass,
+  void addLargeParticle(const std::string &radius, const std::string &mass,
                         const std::string &x_pos, const std::string &y_pos);
 
   friend std::ostream &operator<<(std::ostream &os, const Configuration &configuration);
+
+
+  static void parseConfig(std::ifstream &config, Configuration *configuration);
 
  private:
   int timeslots_, horizon_, gridsize_, number_small_particles_, number_large_particles_;

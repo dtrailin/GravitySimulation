@@ -3,13 +3,12 @@
 
 #include <regex>
 
-#include <fstream>
 #include <mxx/env.hpp>
 
 #include "src/Particle.h"
 #include "src/Simulation.h"
 #include "src/ImageWriter.h"
-#include "src/Communication.h"
+#include "src/Communicator.h"
 
 std::vector<Particle> particles;
 
@@ -48,11 +47,10 @@ int main(int argc, char **argv) {
     }
   }
   config.close();
-  std::cout << configuration << std::endl;
 
-  Communication comm;
+  Communicator comm;
 
-  comm.send_to_neighbors(configuration.large_particles());
+  comm.synchronizeWithNeighbors(configuration.large_particles());
 
   Simulation sim(configuration);
   ImageWriter::writeToImage(sim.run(),

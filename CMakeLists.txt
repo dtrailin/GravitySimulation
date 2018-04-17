@@ -16,12 +16,19 @@ SET(SRCS
         src/ForceVector.h
         src/Configuration.cpp
         src/Configuration.h
-        src/ppm-io/ppm.hpp src/ImageWriter.cpp src/ImageWriter.h src/Communication.cpp src/Communication.h)
+        src/ppm-io/ppm.hpp
+        src/ImageWriter.cpp
+        src/ImageWriter.h
+        #src/Communicator.cpp
+        #src/Communicator.h
+        )
 
 add_subdirectory(lib/mxx)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Output directory for applications" )
 
-add_executable(project2 main.cpp ${SRCS})
-target_link_libraries(project2 mxx)
+add_executable(pool_single pool_single.cpp ${SRCS})
+add_executable(pool pool.cpp ${SRCS})
+
+target_link_libraries(pool mxx)
 
 

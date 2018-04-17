@@ -10,18 +10,18 @@
 #include <set>
 #include "Particle.h"
 
-class Communication {
+class Communicator {
  public:
-  Communication();
+  Communicator();
 
-  void send_to_neighbors(const std::vector<Particle> &vector);
+  void synchronizeWithNeighbors(const std::vector<Particle> &input);
 
  private:
 
   mxx::env e;
   mxx::comm comm;
 
-  std::set<std::pair<int, int>> get_neighbors(const std::pair<int, int> &my_pos, int horizon) const;
+  std::set<std::pair<int, int>> getNeighbors(const std::pair<int, int> &my_pos, int horizon) const;
 };
 
 #endif //PROJECT2_COMMUNICATION_H

@@ -26,6 +26,7 @@ class Simulation {
   std::vector<Particle> last_state_;
   static const int kGravitationalConstant = 5000;
 
+  void calculateForcesOnParticle(const Particle &particle1, Particle *out) const;
 };
 
 #endif //PROJECT2_SIMULATION_H

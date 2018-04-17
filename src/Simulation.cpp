@@ -29,20 +29,23 @@ Simulation::Simulation(const Configuration &configuration)
 
 void Simulation::nextStep() {
   for (const auto &particle1 : last_state_) {
-    ForceVector total(0, 0);
-    for (const auto &particle2 : last_state_) {
+    calculateForcesOnParticle(particle1, &particles_[particle1.id()]);
+  }
+
+  last_state_.swap(particles_);
+}
+void Simulation::calculateForcesOnParticle(const Particle &particle1, Particle *out) const {
+  ForceVector total(0, 0);
+  for (const auto &particle2 : last_state_) {
       if (particle1.id() != particle2.id()) {
         total += gravitationalForce(particle1, particle2);
       }
     }
-    double timestep = configuration_.timestep();
-    double y_dist = 0.5f * (total.getY() / particle1.mass()) * timestep * timestep;
-    double x_dist = 0.5f * (total.getX() / particle1.mass()) * timestep * timestep;
-    particles_[particle1.id()].set_x(particle1.x_pos() + x_dist);
-    particles_[particle1.id()].set_y(particle1.y_pos() + y_dist);
-  }
-
-  last_state_.swap(particles_);
+  double timestep = configuration_.timestep();
+  double y_dist = 0.5f * (total.getY() / particle1.mass()) * timestep * timestep;
+  double x_dist = 0.5f * (total.getX() / particle1.mass()) * timestep * timestep;
+  out->set_x(particle1.x_pos() + x_dist);
+  out->set_y(particle1.y_pos() + y_dist);
 }
 
 ForceVector Simulation::gravitationalForce(const Particle &p1, const Particle &p2) {

@@ -3,14 +3,14 @@
 //
 
 #include <algorithm>
-#include "Communication.h"
-Communication::Communication() : comm(true) {}
-void Communication::send_to_neighbors(const std::vector<Particle> &vector) {
+#include "Communicator.h"
+Communicator::Communicator() : comm(true) {}
+void Communicator::synchronizeWithNeighbors(const std::vector<Particle> &input) {
   auto my_pos = comm.get_current_coordinates();
   int horizon = 1;
 
   std::vector<std::pair<std::pair<int, int>, mxx::future<size_t>>> length_futures;
-  std::set<std::pair<int, int>> neighbors = get_neighbors(my_pos, horizon);
+  std::set<std::pair<int, int>> neighbors = getNeighbors(my_pos, horizon);
 
   for (const auto &neighbor : neighbors) {
     length_futures.push_back(std::make_pair(neighbor, comm.irecv<size_t>(comm.get_rank(neighbor.first, neighbor.second), 1)));
@@ -19,7 +19,7 @@ void Communication::send_to_neighbors(const std::vector<Particle> &vector) {
   comm.barrier();
 
   for (const auto &neighbor : neighbors) {
-    comm.send(vector.size(),
+    comm.send(input.size(),
               comm.get_rank(neighbor.first, neighbor.second),
               1);
   }
@@ -40,7 +40,7 @@ void Communication::send_to_neighbors(const std::vector<Particle> &vector) {
 
   comm.barrier();
 
-  std::transform(vector.begin(), vector.end(), std::back_inserter(tuples),
+  std::transform(input.begin(), input.end(), std::back_inserter(tuples),
                  [](Particle c) { return c.get_tuple(); });
   for (const auto &neighbor : neighbors) {
     comm.send(tuples,
@@ -60,7 +60,7 @@ void Communication::send_to_neighbors(const std::vector<Particle> &vector) {
   }
 
 }
-std::set<std::pair<int, int>> Communication::get_neighbors(const std::pair<int, int> &my_pos, int horizon) const {
+std::set<std::pair<int, int>> Communicator::getNeighbors(const std::pair<int, int> &my_pos, int horizon) const {
   std::set<std::pair<int, int>> neighbors;
 
   for (int i = my_pos.first - horizon; i <= my_pos.first + horizon; i++) {

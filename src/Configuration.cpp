@@ -3,46 +3,44 @@
 //
 
 #include <iostream>
+#include <regex>
+#include <fstream>
+
 #include "Configuration.h"
 
-bool Configuration::addValue(const std::string &key, const std::string &value) {
+void Configuration::addValue(const std::string &key, const std::string &value) {
   const auto &iterator = conditions.find(key);
   if (iterator != conditions.end()) {
     iterator->second(stof(value));
     conditions.erase(key);
-    return true;
+    return;
   }
   std::cerr << key << " has either already been added or is an invalid option" << std::endl;
+  throw std::invalid_argument(key + " has either already been added or is an invalid option");
 
-  return false;
 }
 
-bool Configuration::addLargeParticle(const std::string &radius, const std::string &mass, const std::string &x_pos,
+void Configuration::addLargeParticle(const std::string &radius, const std::string &mass, const std::string &x_pos,
                                      const std::string &y_pos) {
   if (conditions.size() > 0) {
-    std::cout << " Large particles must be defined last" << std::endl;
-    return false;
+    throw std::invalid_argument("Large particles must be defined last");
   }
   double radius_f = stof(radius);
   double mass_f = stof(mass);
   double x_pos_f = stof(x_pos);
   double y_pos_f = stof(y_pos);
   if (mass_f < 0) {
-    std::cerr << "Mass must be greater than zero" << std::endl;
-    return false;
+    throw std::invalid_argument("Mass must be greater than zero");
   }
   if (radius_f < 0) {
-    std::cerr << "Radius must be greater than zero" << std::endl;
-    return false;
+    throw std::invalid_argument("Radius must be greater than zero");
   }
   if (x_pos_f < 0 || x_pos_f > gridsize_ || y_pos_f < 0 || y_pos_f > gridsize_) {
-    std::cerr << "Position must be within grid bounds" << std::endl;
-    return false;
+    throw std::invalid_argument("Position must be within grid bounds");
   }
 
   large_particles_.push_back(Particle(radius_f, mass_f, x_pos_f, y_pos_f, large_particles_.size(), false));
 
-  return true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Configuration &configuration) {
@@ -83,3 +81,20 @@ const std::vector<Particle> &Configuration::large_particles() const {
 double Configuration::small_particle_radius() const {
   return small_particle_radius_;
 }
+void Configuration::parseConfig(std::ifstream &config, Configuration *configuration) {
+  std::regex options("([^\\s]+): ([^\\s]+).*");
+  std::__cxx11::regex planets("([0-9,.]+) ([0-9,.]+) ([0-9,.]+) ([0-9,.]+)");
+
+  std::string line;
+  while (std::getline(config, line)) {
+    std::istringstream is_line(line);
+    std::__cxx11::smatch matches;
+
+    if (regex_search(line, matches, options)) {
+      configuration->addValue(matches[1], matches[2]);
+    } else if (regex_search(line, matches, planets)) {
+      configuration->addLargeParticle(matches[1], matches[2], matches[3], matches[4]);
+    }
+  }
+}
+
