@@ -4,7 +4,6 @@
 #include <regex>
 
 #include <fstream>
-#include <mxx/utils.hpp>
 #include <mxx/env.hpp>
 
 #include "src/Particle.h"
@@ -16,10 +15,6 @@ std::vector<Particle> particles;
 
 int main(int argc, char **argv) {
   mxx::env e(argc,argv);
-
-  Communication comm;
-
-  comm.send_to_neighbors();
 
   if (argc != 3) {
     std::cerr << "Spec file and output required" << std::endl;
@@ -54,6 +49,10 @@ int main(int argc, char **argv) {
   }
   config.close();
   std::cout << configuration << std::endl;
+
+  Communication comm;
+
+  comm.send_to_neighbors(configuration.large_particles());
 
   Simulation sim(configuration);
   ImageWriter::writeToImage(sim.run(),

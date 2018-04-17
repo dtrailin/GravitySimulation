@@ -8,12 +8,13 @@
 #include <mxx/comm.hpp>
 #include <mxx/env.hpp>
 #include <set>
+#include "Particle.h"
 
 class Communication {
  public:
   Communication();
 
-  void send_to_neighbors();
+  void send_to_neighbors(const std::vector<Particle> &vector);
 
  private:
 

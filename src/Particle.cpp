@@ -20,7 +20,14 @@ std::ostream &operator<<(std::ostream &os, const Particle &particle) {
      << particle.y_;
   return os;
 }
-bool Particle::is_small() const {
-  return is_small_;
+Particle::Particle(particle_t t)
+    : radius_(std::get<0>(t)), mass_(std::get<1>(t)),
+      x_(std::get<2>(t)), y_(std::get<3>(t)),
+      id_(std::get<4>(t)), is_small_(static_cast<bool>(std::get<5>(t))) {
+
 }
+Particle::particle_t Particle::get_tuple() {
+  return Particle::particle_t(radius_, mass_, x_, y_, id_, is_small_);
+}
+
 

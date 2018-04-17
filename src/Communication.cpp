@@ -2,38 +2,61 @@
 // Created by Denis on 2018-04-17.
 //
 
+#include <algorithm>
 #include "Communication.h"
 Communication::Communication() : comm(true) {}
-void Communication::send_to_neighbors() {
-
+void Communication::send_to_neighbors(const std::vector<Particle> &vector) {
   auto my_pos = comm.get_current_coordinates();
   int horizon = 1;
 
-
-
-  std::vector<mxx::future<std::basic_string<char, std::char_traits<char>, std::allocator<char>>>> futures;
+  std::vector<std::pair<std::pair<int, int>, mxx::future<size_t>>> length_futures;
   std::set<std::pair<int, int>> neighbors = get_neighbors(my_pos, horizon);
 
-  std::stringstream ss;
-  ss <<"node: " << my_pos.first << ", " << my_pos.second << " is waiting for ";
   for (const auto &neighbor : neighbors) {
-    futures.push_back(comm.irecv_str(100, comm.get_rank(neighbor.first, neighbor.second), 0));
-    ss << neighbor.first << "," << neighbor.second <<" ";
+    length_futures.push_back(std::make_pair(neighbor, comm.irecv<size_t>(comm.get_rank(neighbor.first, neighbor.second), 1)));
   }
-  ss << std::endl;
 
-  std::cout << ss.str() ;
   comm.barrier();
+
   for (const auto &neighbor : neighbors) {
-    comm.send("Message from " + std::to_string(my_pos.first) + "," + std::to_string(my_pos.second),
+    comm.send(vector.size(),
+              comm.get_rank(neighbor.first, neighbor.second),
+              1);
+  }
+
+  std::vector<mxx::future<std::vector<Particle::particle_t, std::allocator<Particle::particle_t>>>> futures;
+  std::vector<Particle::particle_t> tuples;
+
+  for (auto &neighbor_future : length_futures) {
+    auto neighbor = neighbor_future.first;
+    neighbor_future.second.wait();
+
+    size_t size = neighbor_future.second.get();
+
+    futures.push_back(comm.irecv_vec<Particle::particle_t>(size,
+                                                           comm.get_rank(neighbor.first, neighbor.second),
+                                                           0));
+  }
+
+  comm.barrier();
+
+  std::transform(vector.begin(), vector.end(), std::back_inserter(tuples),
+                 [](Particle c) { return c.get_tuple(); });
+  for (const auto &neighbor : neighbors) {
+    comm.send(tuples,
               comm.get_rank(neighbor.first, neighbor.second),
               0);
   }
 
-
   for (auto &future : futures) {
     future.wait();
-    std::cout<<"node: " << my_pos.first << ", " << my_pos.second << " got: \n" << future.get() << std::endl;
+    std::stringstream ss;
+    std::vector<Particle> particles;
+    auto result = future.get();
+    std::transform(result.begin(), result.end(), std::back_inserter(particles),
+                   [](Particle::particle_t c) { return Particle(c); });
+
+
   }
 
 }
@@ -46,10 +69,10 @@ std::set<std::pair<int, int>> Communication::get_neighbors(const std::pair<int, 
       if (i != my_pos.first || j != my_pos.second) {
         int x = i;
         int y = j;
-        if(x < 0){
+        if (x < 0) {
           x = comm.x_size() + x;
         }
-        if(y < 0){
+        if (y < 0) {
           y = comm.y_size() + y;
         }
         x = x % comm.x_size();
