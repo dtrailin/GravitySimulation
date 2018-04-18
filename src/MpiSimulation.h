@@ -9,12 +9,12 @@
 #include "Communicator.h"
 class MpiSimulation : public Simulation {
  public:
-  MpiSimulation(const Configuration &configuration);
+  MpiSimulation(const Configuration &configuration, Communicator &communicator);
   void nextStep() override;
   std::vector<Particle> run() override;
  private:
   std::vector<Particle> aggregate_state_;
-  Communicator communicator_;
+  Communicator &communicator_;
 };
 
 #endif //PROJECT2_MPISIMULATION_H

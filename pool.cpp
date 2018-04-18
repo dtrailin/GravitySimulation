@@ -14,7 +14,7 @@
 std::vector<Particle> particles;
 
 int main(int argc, char **argv) {
-  mxx::env e(argc,argv);
+  mxx::env e(argc, argv);
 
   if (argc != 3) {
     std::cerr << "Spec file and output required" << std::endl;
@@ -31,22 +31,24 @@ int main(int argc, char **argv) {
   try {
     Configuration::parseConfig(config, &configuration);
 
-  }catch (std::exception &e){
+  } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;
     config.close();
     return 0;
   }
   config.close();
 
-  Communicator comm(Configuration());
+  Communicator communicator(configuration);
+  MpiSimulation sim(configuration, communicator);
+  const std::vector<Particle> &collected = communicator.collectAll(sim.run());
+  if (collected.size() > 0) {
+    const std::pair<int, int> &dimensions = communicator.getDimensions();
+    ImageWriter::writeToImage(collected,
+                              argv[2],
+                              dimensions.first * configuration.gridsize(),
+                              dimensions.second * configuration.gridsize());
 
-
-  MpiSimulation sim(configuration);
-  ImageWriter::writeToImage(sim.run(),
-                            argv[2],
-                            configuration);
-
-
+  }
 
   return 0;
 }

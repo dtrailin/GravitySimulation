@@ -33,8 +33,6 @@ int main(int argc, char **argv) {
   config.close();
 
   Simulation sim(configuration);
-  ImageWriter::writeToImage(sim.run(),
-                            argv[2],
-                            configuration);
+  ImageWriter::writeToImage(sim.run(), argv[2], configuration.gridsize());
   return 0;
 }

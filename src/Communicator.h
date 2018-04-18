@@ -17,6 +17,9 @@ class Communicator {
 
   void synchronizeWithNeighbors(std::vector<Particle> &input);
 
+  std::vector<Particle> collectAll(const std::vector<Particle> &local);
+
+  std::pair<int, int> getDimensions();
  private:
   typedef std::pair<int, int> xyPair;
 
@@ -30,6 +33,8 @@ class Communicator {
                                                              int y_size);
 
   static Particle mapToFrameOfReference(const Particle::particle_t &p, const xyPair &xy, int gridsize);
+  static Particle mapFromFrameOfReference(const Particle::particle_t &p, const xyPair &xy, int gridsize);
+
 };
 
 #endif //PROJECT2_COMMUNICATION_H

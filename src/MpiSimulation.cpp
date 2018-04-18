@@ -3,12 +3,11 @@
 //
 
 #include "MpiSimulation.h"
-MpiSimulation::MpiSimulation(const Configuration &configuration) : Simulation(configuration),
-                                                                   communicator_(configuration), aggregate_state_() {}
-void MpiSimulation::nextStep() {
-  int count = 0;
-  for (const auto &particle1 : aggregate_state_) {
+MpiSimulation::MpiSimulation(const Configuration &configuration, Communicator &communicator) : Simulation(
+    configuration), communicator_(communicator) {}
 
+void MpiSimulation::nextStep() {
+  for (const auto &particle1 : aggregate_state_) {
     if (particle1.x_pos() >= 0 && particle1.y_pos() >= 0 && particle1.x_pos() < configuration_.gridsize() - 1
         && particle1.y_pos() < configuration_.gridsize() - 1) {
       Particle p(particle1);
@@ -16,8 +15,6 @@ void MpiSimulation::nextStep() {
       particles_.push_back(p);
     }
   }
-  std::cout << count << std::endl;
-
 }
 
 std::vector<Particle> MpiSimulation::run() {
@@ -27,8 +24,9 @@ std::vector<Particle> MpiSimulation::run() {
     aggregate_state_.swap(particles_);
     nextStep();
     aggregate_state_.clear();
-    std::cout << "running iteration " << i + 1 << " " << particles_.size() << std::endl;
+    std::cout << "running iteration " << i + 1 << " with particles in instance: " << particles_.size() << std::endl;
   }
   return particles_;
 }
+
 

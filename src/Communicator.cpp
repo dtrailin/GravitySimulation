@@ -107,3 +107,77 @@ Particle Communicator::mapToFrameOfReference(const Particle::particle_t &p,
 
 }
 
+Particle Communicator::mapFromFrameOfReference(const Particle::particle_t &p,
+                                             const Communicator::xyPair &xy,
+                                             int gridsize) {
+  Particle particle(p);
+  particle.set_x(particle.x_pos() + xy.first * gridsize);
+  particle.set_y(particle.y_pos() + xy.second * gridsize);
+  return particle;
+
+}
+std::vector<Particle> Communicator::collectAll(const std::vector<Particle> &local) {
+  auto my_pos = comm.get_current_coordinates();
+  if (my_pos.first == 0 && my_pos.second == 0) {
+    std::vector<std::pair<xyPair, mxx::future<size_t >>> length_futures;
+    for (int i = 0; i < comm.x_size(); ++i) {
+      for (int j = 0; j < comm.y_size(); ++j) {
+        if(j != 0 || i != 0){
+          length_futures.push_back(std::make_pair(std::make_pair(i, j), comm.irecv<size_t>(comm.get_rank(i, j), 1)));
+        }
+      }
+    }
+
+    comm.barrier();
+
+    std::vector<std::pair<xyPair, mxx::future<std::vector<Particle::particle_t>>>> futures;
+
+    for (auto &tile_future : length_futures) {
+      auto neighbor = tile_future.first;
+      tile_future.second.wait();
+
+      size_t size = tile_future.second.get();
+
+      futures.push_back(std::make_pair(neighbor,
+                                       comm.irecv_vec<Particle::particle_t>(size, comm.get_rank(neighbor.first,
+                                                                                                neighbor.second), 0)));
+    }
+    comm.barrier();
+
+    std::vector<Particle> all(local);
+    for (auto &tile_future : futures) {
+      auto neighbor = tile_future.first;
+      tile_future.second.wait();
+      auto result = tile_future.second.get();
+
+      std::transform(result.begin(), result.end(), std::back_inserter(all),
+                     [&](Particle::particle_t c) {
+                       return mapFromFrameOfReference(c,
+                                                    neighbor,
+                                                    configuration_.gridsize());
+                     });
+    }
+
+    return all;
+
+  } else {
+    comm.barrier();
+
+    comm.send(local.size(), comm.get_rank(0, 0), 1);
+
+    std::vector<Particle::particle_t> tuples;
+
+    std::transform(local.begin(), local.end(), std::back_inserter(tuples),
+                   [](Particle c) { return c.get_tuple(); });
+
+    comm.barrier();
+
+    comm.send(tuples, comm.get_rank(0, 0), 0);
+
+  }
+  return std::vector<Particle>();
+}
+std::pair<int, int> Communicator::getDimensions() {
+  return std::make_pair(comm.x_size(), comm.y_size());
+}
+
