@@ -29,14 +29,14 @@ Simulation::Simulation(const Configuration &configuration)
 
 void Simulation::nextStep() {
   for (const auto &particle1 : last_state_) {
-    calculateForcesOnParticle(particle1, &particles_[particle1.id()]);
+    calculateForcesOnParticle(particle1, &particles_[particle1.id()], last_state_);
   }
 
   last_state_.swap(particles_);
 }
-void Simulation::calculateForcesOnParticle(const Particle &particle1, Particle *out) const {
+void Simulation::calculateForcesOnParticle(const Particle &particle1, Particle *out, const std::vector<Particle> &last_state) const {
   ForceVector total(0, 0);
-  for (const auto &particle2 : last_state_) {
+  for (const auto &particle2 : last_state) {
       if (particle1.id() != particle2.id()) {
         total += gravitationalForce(particle1, particle2);
       }

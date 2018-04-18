@@ -9,6 +9,7 @@
 #include "src/Simulation.h"
 #include "src/ImageWriter.h"
 #include "src/Communicator.h"
+#include "src/MpiSimulation.h"
 
 std::vector<Particle> particles;
 
@@ -37,11 +38,10 @@ int main(int argc, char **argv) {
   }
   config.close();
 
-  Communicator comm;
+  Communicator comm(Configuration());
 
-  comm.synchronizeWithNeighbors(configuration.large_particles());
 
-  Simulation sim(configuration);
+  MpiSimulation sim(configuration);
   ImageWriter::writeToImage(sim.run(),
                             argv[2],
                             configuration);

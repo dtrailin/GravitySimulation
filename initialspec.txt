@@ -1,8 +1,8 @@
-TimeSlots: 1 # Number of iterations to compute
-TimeStep: 0.005  # Unit time step for each iteration
+TimeSlots: 2 # Number of iterations to compute
+TimeStep: 0.1  # Unit time step for each iteration
 Horizon: 1 # 0 => no process communication, # 1 => adjacent process communication (and so on)
 GridSize: 100 # for a 100x100 cell grid
-NumberOfSmallParticles: 10000 # Number of small (gas) particles
+NumberOfSmallParticles: 6 # Number of small (gas) particles
 SmallParticleMass: 0.0001 # in mass units
 SmallParticleRadius: 0.00001 # in cell-size units
 NumberOfLargeParticles: 4 # Number of large (planet) particles following

@@ -17,16 +17,17 @@ class Simulation {
 
   static ForceVector gravitationalForce(const Particle &p1, const Particle &p2);
 
-  void nextStep();
+  virtual void nextStep();
 
-  std::vector<Particle> run();
- private:
+  virtual std::vector<Particle> run();
+ protected:
   Configuration configuration_;
-  std::vector<Particle> particles_;
-  std::vector<Particle> last_state_;
   static const int kGravitationalConstant = 5000;
+  void calculateForcesOnParticle(const Particle &particle1, Particle *out, const std::vector<Particle> &last_state) const;
+  std::vector<Particle> particles_;
 
-  void calculateForcesOnParticle(const Particle &particle1, Particle *out) const;
+ private:
+  std::vector<Particle> last_state_;
 };
 
 #endif //PROJECT2_SIMULATION_H

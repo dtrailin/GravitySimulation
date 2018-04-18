@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O3")
 
 SET(SRCS
         src/Particle.cpp
@@ -25,7 +25,7 @@ SET(SRCS
 SET(SRCS_MULTI
         src/Communicator.cpp
         src/Communicator.h
-        )
+        src/MpiSimulation.cpp src/MpiSimulation.h)
 
 add_subdirectory(lib/mxx)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Output directory for applications" )
