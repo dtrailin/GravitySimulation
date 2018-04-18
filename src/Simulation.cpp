@@ -19,7 +19,6 @@ Simulation::Simulation(const Configuration &configuration)
                                    configuration_.small_particle_mass(),
                                    distribution(generator),
                                    distribution(generator),
-                                   last_state_.size(),
                                    true));
 
   }
@@ -28,8 +27,10 @@ Simulation::Simulation(const Configuration &configuration)
 }
 
 void Simulation::nextStep() {
+  int i = 0;
   for (const auto &particle1 : last_state_) {
-    calculateForcesOnParticle(particle1, &particles_[particle1.id()], last_state_);
+    calculateForcesOnParticle(particle1, &particles_[i], last_state_);
+    i++;
   }
 
   last_state_.swap(particles_);
@@ -37,9 +38,8 @@ void Simulation::nextStep() {
 void Simulation::calculateForcesOnParticle(const Particle &particle1, Particle *out, const std::vector<Particle> &last_state) const {
   ForceVector total(0, 0);
   for (const auto &particle2 : last_state) {
-      if (particle1.id() != particle2.id()) {
         total += gravitationalForce(particle1, particle2);
-      }
+
     }
   double timestep = configuration_.timestep();
   double y_dist = 0.5f * (total.getY() / particle1.mass()) * timestep * timestep;

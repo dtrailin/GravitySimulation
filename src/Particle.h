@@ -10,13 +10,12 @@
 
 struct Particle {
  public:
-  typedef std::tuple<double, double, double, double, unsigned long, int> particle_t;
+  typedef std::tuple<double, double, double, double, char> particle_t;
 
   Particle(double radius,
              double mass,
              double x_pos,
              double y_pos,
-             unsigned long id,
              bool is_small);
 
   explicit Particle(particle_t t);
@@ -39,9 +38,6 @@ struct Particle {
     return x_;
   }
 
-  unsigned long id() const {
-    return id_;
-  }
 
   void set_x(double x) {
     x_ = x;
@@ -58,7 +54,6 @@ struct Particle {
 
  public:
   double radius_, mass_, x_, y_;
-  unsigned long id_;
   bool is_small_;
 
 };
@@ -67,6 +62,5 @@ static Particle create_particle(double radius_,
                                 double mass_,
                                 double x_pos,
                                 double y_pos,
-                                unsigned long id,
                                 bool is_small);
 #endif //PROJECT2_PARTICLE_H

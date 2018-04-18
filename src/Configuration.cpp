@@ -39,7 +39,7 @@ void Configuration::addLargeParticle(const std::string &radius, const std::strin
     throw std::invalid_argument("Position must be within grid bounds");
   }
 
-  large_particles_.push_back(Particle(radius_f, mass_f, x_pos_f, y_pos_f, large_particles_.size(), false));
+  large_particles_.push_back(Particle(radius_f, mass_f, x_pos_f, y_pos_f, false));
 
 }
 
