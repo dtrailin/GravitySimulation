@@ -8,8 +8,8 @@ MpiSimulation::MpiSimulation(const Configuration &configuration, Communicator &c
 
 void MpiSimulation::nextStep() {
   for (const auto &particle1 : aggregate_state_) {
-    if (particle1.x_pos() >= 0 && particle1.y_pos() >= 0 && particle1.x_pos() < configuration_.gridsize() - 1
-        && particle1.y_pos() < configuration_.gridsize() - 1) {
+    if (particle1.x_pos() >= 0 && particle1.y_pos() >= 0 && particle1.x_pos() < configuration_.gridsize()
+        && particle1.y_pos() < configuration_.gridsize() ) {
       Particle p(particle1);
       calculateForcesOnParticle(particle1, &p, aggregate_state_);
       particles_.push_back(p);
