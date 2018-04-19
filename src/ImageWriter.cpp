@@ -43,7 +43,7 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input, const std::st
     }
   }
 
-  thinks::ppm::writeRgbImage(filename, static_cast<const size_t>(x_size), x_size, pixel_data);
+  thinks::ppm::writeRgbImage(filename, static_cast<const size_t>(x_size), static_cast<const size_t>(y_size), pixel_data);
 }
 int ImageWriter::gridCoordinateToImageIndex(int y_size, int x, int y, ImageWriter::color color) {
   return (y * y_size + x) * 3 + color;
