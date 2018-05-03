@@ -18,9 +18,17 @@ struct Particle {
              double y_pos,
              bool is_small);
 
-  explicit Particle(particle_t t);
+  explicit Particle(particle_t t)
+      : radius_(std::get<0>(t)), mass_(std::get<1>(t)),
+        x_(std::get<2>(t)), y_(std::get<3>(t)),
+        is_small_(static_cast<bool>(std::get<4>(t))) {
 
-  particle_t get_tuple();
+  }
+
+  particle_t get_tuple() {
+    return Particle::particle_t(radius_, mass_, x_, y_, is_small_);
+  }
+
 
   double radius() const {
     return radius_;
@@ -58,9 +66,4 @@ struct Particle {
 
 };
 
-static Particle create_particle(double radius_,
-                                double mass_,
-                                double x_pos,
-                                double y_pos,
-                                bool is_small);
 #endif //PROJECT2_PARTICLE_H

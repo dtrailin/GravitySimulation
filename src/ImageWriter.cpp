@@ -2,10 +2,12 @@
 // Created by Denis on 2018-04-03.
 //
 
-#include <iostream>
 #include "ImageWriter.h"
-#include "ppm-io/ppm.hpp"
+
+#include <iostream>
 #include <algorithm>
+
+#include <ppm.hpp>
 
 void ImageWriter::writeToImage(const std::vector<Particle> &input, const std::string &filename, int x_size, int y_size) {
 

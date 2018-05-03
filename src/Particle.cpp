@@ -14,19 +14,11 @@ Particle::Particle(double radius_,
        is_small_(is_small) {}
 
 std::ostream &operator<<(std::ostream &os, const Particle &particle) {
-  os << " radius_: " << particle.radius_ << " mass_: " << particle.mass_ << " x_: "
-     << particle.x_ << " y_: "
+  os << " radius: " << particle.radius_ << " mass: " << particle.mass_ << " x: "
+     << particle.x_ << " y: "
      << particle.y_;
   return os;
 }
-Particle::Particle(particle_t t)
-    : radius_(std::get<0>(t)), mass_(std::get<1>(t)),
-      x_(std::get<2>(t)), y_(std::get<3>(t)),
-      is_small_(static_cast<bool>(std::get<4>(t))) {
 
-}
-Particle::particle_t Particle::get_tuple() {
-  return Particle::particle_t(radius_, mass_, x_, y_, is_small_);
-}
 
 

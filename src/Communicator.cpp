@@ -108,8 +108,8 @@ Particle Communicator::mapToFrameOfReference(const Particle::particle_t &p,
 }
 
 Particle Communicator::mapFromFrameOfReference(const Particle::particle_t &p,
-                                             const Communicator::xyPair &xy,
-                                             int gridsize) {
+                                               const Communicator::xyPair &xy,
+                                               int gridsize) {
   Particle particle(p);
   particle.set_x(particle.x_pos() + xy.first * gridsize);
   particle.set_y(particle.y_pos() + xy.second * gridsize);
@@ -122,7 +122,7 @@ std::vector<Particle> Communicator::collectAll(const std::vector<Particle> &loca
     std::vector<std::pair<xyPair, mxx::future<size_t >>> length_futures;
     for (int i = 0; i < comm.x_size(); ++i) {
       for (int j = 0; j < comm.y_size(); ++j) {
-        if(j != 0 || i != 0){
+        if (j != 0 || i != 0) {
           length_futures.push_back(std::make_pair(std::make_pair(i, j), comm.irecv<size_t>(comm.get_rank(i, j), 1)));
         }
       }
@@ -153,8 +153,8 @@ std::vector<Particle> Communicator::collectAll(const std::vector<Particle> &loca
       std::transform(result.begin(), result.end(), std::back_inserter(all),
                      [&](Particle::particle_t c) {
                        return mapFromFrameOfReference(c,
-                                                    neighbor,
-                                                    configuration_.gridsize());
+                                                      neighbor,
+                                                      configuration_.gridsize());
                      });
     }
 

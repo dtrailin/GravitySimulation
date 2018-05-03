@@ -16,7 +16,7 @@ SET(SRCS
         src/ForceVector.h
         src/Configuration.cpp
         src/Configuration.h
-        src/ppm-io/ppm.hpp
+        lib/ppm-io/include/ppm.hpp
         src/ImageWriter.cpp
         src/ImageWriter.h
         )
@@ -28,11 +28,18 @@ SET(SRCS_MULTI
         src/MpiSimulation.cpp src/MpiSimulation.h)
 
 add_subdirectory(lib/mxx)
+add_subdirectory(lib/ppm-io)
+
+
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Output directory for applications" )
 
 add_executable(pool_single src/pool_single.cpp ${SRCS})
 add_executable(pool src/pool.cpp ${SRCS} ${SRCS_MULTI})
 
+target_link_libraries(pool_single ppm-io)
+target_link_libraries(pool ppm-io)
+
 target_link_libraries(pool mxx)
+
 
 
