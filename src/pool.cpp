@@ -42,7 +42,6 @@ int main(int argc, char **argv) {
   MpiSimulation sim(configuration, communicator);
   const std::vector<Particle> &collected = communicator.collectAll(sim.run());
   if (collected.size() > 0) {
-    std::cout << "final # of particles: " << collected.size() <<std::endl;
     const std::pair<int, int> &dimensions = communicator.getDimensions();
     ImageWriter::writeToImage(collected,
                               argv[2],

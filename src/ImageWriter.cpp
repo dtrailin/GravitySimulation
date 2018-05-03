@@ -24,6 +24,7 @@ void ImageWriter::writeToImage(const std::vector<Particle> &input, const std::st
             if ((pow(i - x_i, 2) + pow(j - y_i, 2) <= pow(particle.radius(), 2))
                 && (i >= 0 && i <= x_size  && j >= 0 && j <= y_size)) {
               pixel_data[gridCoordinateToImageIndex(y_size, i, j, blue)] = 255;
+              pixel_data[gridCoordinateToImageIndex(y_size, i, j, red)] = 0;
             }
           }
         }
