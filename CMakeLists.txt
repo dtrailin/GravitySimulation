@@ -30,8 +30,8 @@ SET(SRCS_MULTI
 add_subdirectory(lib/mxx)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Output directory for applications" )
 
-add_executable(pool_single pool_single.cpp ${SRCS})
-add_executable(pool pool.cpp ${SRCS} ${SRCS_MULTI})
+add_executable(pool_single src/pool_single.cpp ${SRCS})
+add_executable(pool src/pool.cpp ${SRCS} ${SRCS_MULTI})
 
 target_link_libraries(pool mxx)
 
