@@ -1,1 +1,1 @@
-This is an simulator the simulates the effects of gravity on particles, parallelized using MPI. 
+This is a simulator that simulates the effects of gravity on particles, parallelized using MPI. It can scale up to dozens of cores and millions of particles. The initial state of the large particles it the same across all cores while the positions of small particles are random. It is possible to define the horizon of communication between nodes.  
